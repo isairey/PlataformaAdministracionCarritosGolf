@@ -165,7 +165,7 @@ La plataforma utiliza una arquitectura basada en entidades relacionadas para adm
 # 📂 Estructura del proyecto
 
 ```bash
-golf-cart-rentals/
+PlataformaAdministracionCarritosGolf/
 │
 ├── app/                     # Lógica principal
 ├── config/                  # Configuración del sistema
@@ -198,7 +198,7 @@ golf-cart-rentals/
 ## 1️⃣ Clonar repositorio
 
 ```bash
-git clone https://github.com/umts/golf-cart-rentals.git
+git clone https://github.com/isairey/PlataformaAdministracionCarritosGolf.git
 ```
 
 ---
