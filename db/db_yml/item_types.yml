@@ -1,0 +1,7 @@
+- name: "4 Seat"
+  base_fee: "40"
+  fee_per_day: "35"
+
+- name: "6 Seat"
+  base_fee: "60"
+  fee_per_day: "40"

@@ -1,0 +1,38 @@
+<% provide( :page_header, 'Process No Show' ) %>
+
+<table class="table table-bordered table-hover">
+  <tr class="info">
+    <th>Car Type</th>
+    <th>Car Name</th>
+    <th>Amount</th>
+    <th>Responsible Person</th>
+    <th>Department</th>
+    <th>Rental Start Date</th>
+    <th>Rental End Date</th>
+  </tr>
+  <tr>
+    <td><%= rental.str_item_types%></td>
+    <td><%= rental.str_items%></td>
+    <td><%= number_to_currency(rental.financial_transaction.amount) %></td>
+    <td><%= rental.renter.full_name %></td>
+    <td><%= rental.department.name %></td>
+    <td><%= rental.start_time.to_date %></td>
+    <td><%= rental.end_time.to_date %></td>
+  </tr>
+</table>
+
+<%= form_for rental do |f| %>
+
+  <div class="form-group col-xs-12">
+    <label class="col-xs-2 control-label" for="contacted-customer?">Customer informed of no-show status?</label>
+    <div class="col-xs-6">
+      <input type="checkbox" name="contacted-customer?" data-on-text='Yes' data-off-text='No' required>
+    </div>
+  </div>
+
+  <div class="form-group col-xs-12">
+    <div class="col-xs-offset-2 col-xs-10">
+      <%= f.submit 'Process No Show', class: "btn btn-primary", data: { confirm: 'Are you sure?' } %>
+    </div>
+  </div>
+<% end %>

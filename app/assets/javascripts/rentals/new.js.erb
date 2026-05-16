@@ -1,0 +1,99 @@
+function isEmpty(str) {
+  return (!str || 0 === str.length);
+}
+
+function days_between(sd, ed) {
+  var one_day=1000*60*60*24;
+  var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+  var startD = new Date(sd.replace(pattern,'$3-$2-$1')).getTime();
+  var endD = new Date(ed.replace(pattern,'$3-$2-$1')).getTime();
+  var diff_ms = endD - startD;
+
+  //have to add one day at the end 12th to 13th is 2 days, pick up on 12 drop of on 13 is two full days
+  return Math.round(diff_ms/one_day) + 1;
+}
+
+function item_types_to_arr() {
+  //collect item types (will always be at least [])
+
+  //because of the way im constructing the parameters to Rental.new I need rentals_items_attributes
+  //in a way such that multiple item types yield multiple rentals_items not just a single one.
+  //refer to this methods caller for more information
+  return $(".item-type-quantity-picker").toArray().reduce(function (acc,part) {
+    var it_part = [];
+    for(var i=0;i<part.value;i++){
+      it_part.push($(part).attr("_name"));
+    }
+    return acc.concat(it_part);
+  }, []);
+}
+
+function costCalculation(){
+  //collect item types (will always be at least [])
+  var item_types = item_types_to_arr();
+
+  var raw_start_time = $('#rental_start_time').val();
+  var raw_end_time = $('#rental_end_time').val();
+  var amount = $('#rental_amount');
+  var date_range = $('#date_range');
+
+  if(!item_types.length <= 0 && !isEmpty(raw_end_time) && !isEmpty(raw_start_time)) {
+    if(new Date(raw_start_time) > new Date(raw_end_time)) {
+      return; //do not perform a cost calculation
+      //the end_date changed to start_date + previous range then call this method once again
+    }
+    var range = days_between(raw_start_time, raw_end_time);
+
+    $.ajax({
+      url: Routes.rentals_cost_path(),
+      dataType: 'json',
+      data: { item_types: item_types, start_time: raw_start_time, end_time: raw_end_time },
+      success: function (data) {
+        amount.val(data["_total"]);
+        date_range.val(range);
+      },
+      error: function () { alert('failed to retreive rental cost'); }
+    });
+  } else {
+    amount.val("0");
+  }
+}
+
+$(document).ready(function () {
+  costCalculation(); //initial cost calculaton
+
+  $("#rental_amount").change(function () {
+    alert('Warning! You are overriding the system defaults.');
+  });
+
+  $(".datepicker").datetimepicker().on('dp.change', function(ev) {
+    var field = $(this).find("input");
+    var raw_start_time = $('#rental_start_time').val();
+    var raw_end_time = $('#rental_end_time').val();
+    //if this is the start time, and the start is greater than the end, we should adjust the end date
+    if(field.attr("id") === "rental_start_time" && new Date(raw_start_time) > new Date(raw_end_time)) {
+      //date range hasnt changed yet, we can use it to update end date
+      //set end date to start date + whatever range we had before - 1 because range was inclusive
+      //NOTE: date range cannot be < 1
+      var new_end_date = moment(raw_start_time).
+        add($("#date_range").val()-1, 'days').format("YYYY-MM-DD");
+      $("#rental_end_time").val(new_end_date); //update end_time
+    }
+
+    costCalculation();
+  });
+
+  $('input.cost-dependent.item-type-quantity-picker').change(function () {
+    costCalculation();
+  });
+
+  $('form#new_rental').submit(function () {
+    //need to take all the item types and format them correctly; it should look like this
+    // { renter_id: 1, rental_items_attributes: { {item_type_id: 1}, {item_type_id: 4} }
+    // need a few inputs with name = "rental[rentals_items_attributes][0][item_type_id]"
+    // these will be hidden from user so they think those other inputs are the things that make it work
+    item_types_to_arr().forEach(function (it, ind) {
+      $(this).append("<input name='rental[rentals_items_attributes][" + ind + "][item_type_id]' value='" + it + "' hidden>");
+    });
+  });
+});

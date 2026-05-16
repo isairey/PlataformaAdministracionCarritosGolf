@@ -1,0 +1,15 @@
+<% provide( :page_header, "Editing #{@group.name}" ) %>
+
+<%= render 'form' %>
+
+<hr/>
+
+<h3>Permissions</h3>
+<div>
+  <%= render partial: 'permission_tabs', locals: { perm_group: @group } %>
+</div>
+
+<h3>Users</h3>
+<div>
+  <%= render partial: 'user_tabs', locals: { users: @group.groups_users.all } %>
+</div>
