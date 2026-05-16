@@ -258,16 +258,7 @@ npm start
 
 <div align="center">
 
-### 🏠 Dashboard principal
-![Dashboard](https://user-images.githubusercontent.com/64264883/115393704-a524be80-a1ea-11eb-9c74-aeb3ad747ae8.png)
-
-### 📅 Gestión de reservaciones
-![Reservations](https://user-images.githubusercontent.com/64264883/115393783-bcfc4280-a1ea-11eb-9ce0-a4ee207e5954.png)
-
-### 📊 Administración del sistema
-![Admin](https://user-images.githubusercontent.com/64264883/115393832-cbe2f500-a1ea-11eb-995d-a06cceeb4c4e.png)
-
-### 🧠 Diagrama relacional
+### 🧠 Diagrama relacional del sistema
 ![Schema](https://github.com/umts/golf-cart-rentals/blob/master/Golfcart%20Schema.png)
 
 </div>
