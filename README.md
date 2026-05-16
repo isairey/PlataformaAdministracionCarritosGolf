@@ -259,7 +259,7 @@ npm start
 <div align="center">
 
 ### 🧠 Diagrama relacional del sistema
-![Schema](https://github.com/umts/golf-cart-rentals/blob/master/Golfcart%20Schema.png)
+![Schema](https://github.com/isairey/PlataformaAdministracionCarritosGolf/blob/main/Golfcart%20Schema.png)
 
 </div>
 
